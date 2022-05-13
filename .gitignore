@@ -1,0 +1,9 @@
+.DS_Store
+.htaccess
+bower_components/*
+node_modules/*
+notes.dat
+Note.dat
+test.js
+package-lock.json
+public/
