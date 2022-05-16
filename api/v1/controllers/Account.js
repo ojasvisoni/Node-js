@@ -6,14 +6,14 @@ let ua = require("useragent");
 ua(true);
 
 //helpers
-var response = require("./../helpers/response");
+var response = require("../helpers/response");
 var userUtil = require("./../helpers/users");
-var emailUtil = require("./../helpers/emails");
+var emailUtil = require("../helpers/emails");
 
 //models
-var Users = require("./../models/Users");
-var Profile = require("./../models/Profile");
-var config = require("./../../../config");
+var Users = require("../models/Users");
+var Profile = require("../models/Profile");
+var config = require("../../../config");
 
 function Controller() {}
 

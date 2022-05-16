@@ -1,5 +1,5 @@
 let crypto = require("crypto");
-let config = require("./../../../config");
+let config = require("../../../config");
 
 module.exports = {
 	createHash: (pass, salt) => {
