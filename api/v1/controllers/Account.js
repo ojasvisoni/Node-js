@@ -42,3 +42,19 @@ Controller.prototype.sendEmail = (req, res) => {
 	}
 
 };
+
+Controller.prototype.setProfile = (req, res) => {
+	Users.getAll().then(function(users){
+		users.forEach( function(user){
+			Profile.addProfile(user).then(function(saved){
+				console.log(saved);
+			}).catch(function(err){
+				console.log(err);
+			});
+		});
+
+		response.sendSuccess(res, "Success");
+	}).catch(function(err){
+		response.sendFail(res, "Failed");
+	})
+};
