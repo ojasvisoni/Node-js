@@ -44,13 +44,6 @@ var parseBody = (body, data) => {
 const object = {
 	initMail: (name, type, data) => {
 		return new bluebird.Promise(function(resolve, reject) {
-			/*Templetes.findOne({name: name}).then(function(templete) {
-				
-			}).catch(function(err){
-				console.log(err);
-				reject("No templete with name " + name );
-			});*/
-
 			var mailOptions = {
 				from: `Sonigator<${sender}>`,
 				replyTo: reply,
