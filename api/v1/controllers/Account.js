@@ -58,3 +58,24 @@ Controller.prototype.setProfile = (req, res) => {
 		response.sendFail(res, "Failed");
 	})
 };
+
+Controller.prototype.verify_email = (req, res) => {
+	if(!req.params.token) {
+		response.sendNotFound(res, "Token not found");
+	}else{
+		var token = req.params.token;
+		if(validator.isUUID(token)) {
+			Users.email_verify(token).then(function(s){
+				if(s === true){
+					response.sendSuccess(res, "Email verification success");
+				}else{
+					response.sendFail(res, "Failed to verify email");
+				}
+			}).catch(function(){
+				response.sendFail(res, "Failed to verify email");
+			});
+		}else{
+			response.sendFail(res, "Invalid verification token");
+		}
+	}
+};
