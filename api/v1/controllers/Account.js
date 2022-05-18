@@ -178,3 +178,80 @@ Controller.prototype.register = (req, res) => {
 	}
 
 };
+
+Controller.prototype.login = (req, res) => {
+	if(!req.body.email || !req.body.password || !req.body.ip || !req.body.user_agent) {
+		response.sendFail(res, "Email/Password missing");
+	}else{
+		if(validator.isEmail(req.body.email)){
+			var email = req.body.email;
+			//validator.normalizeEmail(req.body.email);
+			//validator.matches(req.body.password, '^.*(?=.{8,16})(?=.*[a-zA-Z])(?=.*\d)(?=.*[!#$%&?_ "]).*$', 'i')
+			if(true){
+				Users.get({email: email}).then(function(user){
+					if(user && user.status === 'ACTIVE') {
+						var hpass = userUtil.createHash(req.body.password, user.salt);
+						if(hpass === user.password) {
+
+							if( user.notification.login ){
+								emailUtil.initMail("login_notice", "text", {
+									name: user.name,
+									to: user.email,
+									subject: "Account login information",
+									datetime: new Date().toLocaleString(),
+									ipaddress: req.body.ip,
+									browserinfo: ua.parse( req.body.user_agent ).toAgent()
+								}).then(function(info){
+									console.log( "Login Mail", info );
+								}).catch(function(e){
+									console.log( "Login Mail", e );
+								});
+							}
+							if((typeof(user.security) == 'undefined' || user.security === null)) {
+								jwt.sign({name: user.name, id: user._id, email: email}, config.jwtkey, {expiresIn: 3600 * 24 * 7}, function(err, token){
+									if(err){
+										response.sendFail(res, "Login failed, try again!");
+									}else{
+										rp({
+											url: "http://ip-api.com/json/" + req.body.ip,
+											json: true,
+											method: "GET"
+										}).then(function(ipinfo){
+											Users.login({user_id: user._id, ip: req.body.ip, user_agent: req.body.user_agent, city: info.city, country: ipinfo.country});
+											response.sendSuccess(res, "Login Success", {
+												token: token,
+												user_id: user._id,
+												name: user.name,
+												email: email
+											});
+										}).catch(function(e){
+											console.log("IP info", e);
+											response.sendFail(res, "Failed. Try Again!");
+										});
+									}
+								});
+							}else{
+								response.sendSuccess(res, "Login Success", {
+									user_id: user._id,
+									name: user.name,
+									next: user.security,
+									email: email
+								});	
+							}
+						}else{
+							response.sendFail(res, "Either Email Id or Password is incorrect. Please try again");
+						}
+					}else{
+						response.sendFail(res, "Account temporarily deactivated. Please contact Sonigator Support.");
+					}
+				}).catch(function(err){
+					response.sendFail(res, "No registered email found");
+				});
+			}else{
+				response.sendFail(res, "Password is not valid");	
+			}
+		}else{
+			response.sendFail(res, "Email is not valid");
+		}
+	}
+};
