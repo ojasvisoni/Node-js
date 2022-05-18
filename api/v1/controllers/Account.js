@@ -111,12 +111,12 @@ Controller.prototype.register = (req, res) => {
 			m.push("email");
 		}
 		data.password = _post.password;
-		/*if(validator.matches(_post.password, '^.*(?=.{8,16})(?=.*[a-zA-Z])(?=.*\d)(?=.*[!#$%&? "]).*$', 'i'))
+		if(validator.matches(_post.password, '^.*(?=.{8,16})(?=.*[a-zA-Z])(?=.*\d)(?=.*[!#$%&? "]).*$', 'i'))
 			data.password = _post.password;
 		else{
 			is_validated = false;
 			m.push("password");
-		}*/
+		}
 
 		if(is_validated){
 
@@ -139,8 +139,8 @@ Controller.prototype.register = (req, res) => {
 									token: user.verification.email.token,
 									name: user.name,
 									to: user.email,
-									subject: "Cointronix - Email Verification",
-									link: 'https://account.cointronix.co/verify_email?token=' + user.verification.email.token,
+									subject: "Sonigator - Email Verification",
+									link: 'https://sonigator.com/verify_email?token=' + user.verification.email.token,
 								}).then(function(info){
 									if(info === true) {
 										response.sendSuccess(res, "Registration Success");
