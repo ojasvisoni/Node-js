@@ -79,3 +79,102 @@ Controller.prototype.verify_email = (req, res) => {
 		}
 	}
 };
+
+Controller.prototype.register = (req, res) => {
+
+	// only name, email, password required
+	var _post = req.body;
+	if( !_post.name || !_post.email || !_post.password || !_post.ip || !_post.user_agent) {
+		response.sendFail(res, "All field required");
+	}else{
+		var data = {};
+		_name = _post.name;
+		_name = _name.split(" ");
+		_is_name = true;
+		_name.forEach(function(_n){
+			if(!validator.isAlpha(_n)) _is_name = false;
+		});
+		var is_validated = true;
+		var m = [];
+
+		if(_is_name === true)
+			data.name = _post.name;
+		else{
+			is_validated = false;
+			m.push('name');
+		}
+
+		if(validator.isEmail(_post.email))
+			data.email = _post.email;//validator.normalizeEmail(_post.email);
+		else{
+			is_validated = false;
+			m.push("email");
+		}
+		data.password = _post.password;
+		/*if(validator.matches(_post.password, '^.*(?=.{8,16})(?=.*[a-zA-Z])(?=.*\d)(?=.*[!#$%&? "]).*$', 'i'))
+			data.password = _post.password;
+		else{
+			is_validated = false;
+			m.push("password");
+		}*/
+
+		if(is_validated){
+
+			Users.is_email_exist(_post.email).then(function(found) {
+				if(!found){
+					data.salt = userUtil.createSalt();
+					data.password = userUtil.createHash(data.password, data.salt);
+					data.email_token = uuid();
+					data.ip = validator.escape(_post.ip);
+					data.user_agent = validator.escape(_post.user_agent);
+					Users.add(data).then(function(user){
+
+						if(!user){
+							response.sendFail(res, "Failed to register new user");
+						}else{
+							Profile.addProfile(user).then(function(saved){
+
+								//send email
+								emailUtil.initMail("register", "text", {
+									token: user.verification.email.token,
+									name: user.name,
+									to: user.email,
+									subject: "Cointronix - Email Verification",
+									link: 'https://account.cointronix.co/verify_email?token=' + user.verification.email.token,
+								}).then(function(info){
+									if(info === true) {
+										response.sendSuccess(res, "Registration Success");
+									}else{
+										Users.delete(user._id);
+										response.sendFail(res, "Failed to send email");
+									}
+								}).catch(function(e){
+									Users.delete(user._id);
+									response.sendFail(res, "Failed to send email");
+								});
+
+							}).catch(function(err){
+								Users.delete(user._id);
+								response.sendFail(res, err);
+							});
+							
+						}
+					}).catch(function(err){
+						console.log(err);
+						response.sendFail(res, err);	
+					});
+				}else{
+					response.sendFail(res, "Email already exist");
+				}
+			}).catch(function(err){
+				console.log(err);
+				response.sendFail(res, "Server Error");
+			});
+
+		}else{
+			response.sendFail(res, "Please check and validate " + m.toString());
+		}
+
+	}
+
+};
