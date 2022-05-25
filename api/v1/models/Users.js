@@ -334,10 +334,43 @@ module.exports = {
 
 	sendtoOtp: (phone_no, otp) => {
 		// Used MSG91 API
+		var mob = phone_no;
+        var authKey = "276566A5lvFk43XWT5cdaad1b"; 
+        var mobileNumber = mob;
+        var opt = otp; 
+        var senderId = "NITHAD";  
+        var message = urlencode("This is you verification code" + opt + "for NITH");
+ 
+        var route = "4";
+        var postData = array( 
+            'authkey', authKey,
+            'sender' , senderId,
+            'mobiles' , mobileNumber,
+            'route' , route,
+            'message' , message,
+            'DLT_TE_ID' , '1207164732968943062' 
+        );
+       
+        var url = "http://api.msg91.com/api/sendhttp.php";
+        var ch = curl_init();
+        curl_setopt_array(ch, array(
+            CURLOPT_URL => url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => postData
+        ));
 
+        curl_setopt(ch, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt(ch, CURLOPT_SSL_VERIFYPEER, 0);
+        var output = curl_exec(ch);
+  
+        if (curl_errno(ch)) {
 
-		
-		var result = '';
+            return 'error:' . curl_error(ch);
+        }      
+        curl_close(ch);
+        
+		var result = output;
 		if (result != "") {
 			return ["status", true];
 		} else {
