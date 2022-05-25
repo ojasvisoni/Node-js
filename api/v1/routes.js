@@ -14,5 +14,6 @@ router.use(auth.header);
 router.put("/verify_email/:token", accountController.verify_email);
 router.post("/register", accountController.register);
 router.post("/login", accountController.login);
+router.post("/login_with_2fa", accountController.login_with_2fa);
 
 module.exports = router;
