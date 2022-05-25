@@ -254,4 +254,41 @@ Controller.prototype.login = (req, res) => {
 			response.sendFail(res, "Email is not valid");
 		}
 	}
+
+
+	Controller.prototype.login_with_2fa = (req, res) => {
+		if( !req.body.user_id || !req.body.code_2fa || !req.body.ip || !req.body.user_agent) {
+			response.sendFail(res, "User/Code is required");
+		}else{
+			var user_id = req.body.user_id;
+			var code_2fa = Number( req.body.code_2fa );
+	
+			if(validator.isUUID( user_id )){
+				if( code_2fa > 99999 && code_2fa < 1000000 ){
+					Users.check_2fa( req.body.user_id, code_2fa ).then(function(data) {
+						jwt.sign({name: data.name, id: data.user_id}, config.jwtkey, {expiresIn: 3600 * 24 * 7}, function(err, token){
+							if(err){
+								response.sendFail(res, "Login failed, try again!");
+							}else{
+								Users.login({user_id: data.user_id, ip: validator.escape(req.body.ip), user_agent: validator.escape(req.body.user_agent)});
+								response.sendSuccess(res, "Login Success", {
+									token: token,
+									user_id: data.user_id,
+									name: data.name
+								});
+							}
+						});	
+					}).catch(function(err){
+						response.sendFail(res, "2FA code is incorrect");
+					});
+				}else{
+					response.sendFail(res, "Invalid Code");
+				}
+			}else{
+				response.sendFail(res, "Invalid User id");
+			}
+		}
+	};
+	
+
 };
