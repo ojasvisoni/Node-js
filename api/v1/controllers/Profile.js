@@ -39,3 +39,20 @@ Controller.prototype.account = (req, res) => {
 		});
 	}
 };
+
+Controller.prototype.change_password = (req, res) => {
+	if(!req.auth.user_id) {
+		response.sendFail(res, "Unauthorised access!");
+	}else{
+		if(!req.body.old_password || !req.body.new_password) {
+			response.sendFail(res, "Old/New Password required");
+		}else{
+			Users.change_password({id: req.auth.user_id, new: req.body.new_password, old: req.body.old_password}, userUtil).then(function(){
+				response.sendSuccess(res, "Password changed");
+			}).catch(function(err){
+				response.sendFail(res, err);
+			});
+			
+		}
+	}
+};
