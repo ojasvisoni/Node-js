@@ -323,5 +323,37 @@ Controller.prototype.send_otp = (req, res) => {
 	}
 };
 
+Controller.prototype.forgot_password = (req, res) => {
+	if(!req.body.email) {
+		response.sendFail(res, "Email required");
+	}else{
+		var email = req.body.email;
+		if(validator.isEmail(email)) {
+			//email = validator.normalizeEmail(email);
+			Users.create_password_reset(email).then(function(data){
+				//send email
+				emailUtil.initMail("forgot_password", "text", {
+					token: data.token,
+					name: data.name,
+					to: data.email,
+					link: 'https://sonigator.com/reset_password?token=' + data.token,
+				}).then(function(info){
+					if(info === true) {
+						response.sendSuccess(res, "Reset link has been sent to registered email");
+					}else{
+						response.sendFail(res, "Failed to send email");
+					}
+				}).catch(function(e){
+					response.sendFail(res, "Failed to send email");
+				});
+			}).catch(function(err){
+				response.sendFail(res, err);
+			});
+		}else{
+			response.sendFail(res, "Invalid Email");
+		}
+	}
+};
+
 
 module.exports = new Controller();
