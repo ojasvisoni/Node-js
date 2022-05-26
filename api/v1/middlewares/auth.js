@@ -37,6 +37,6 @@ module.exports = {
 		}else{
 			response.sendFail(res, "User authentication token required");
 		}
-	},
+	}
 
 };

@@ -19,4 +19,8 @@ router.post("/send_otp", accountController.send_otp);
 router.post("/forgot_password", accountController.forgot_password);
 router.post("/reset_password", accountController.reset_password);
 
+router.use(auth.user);
+// after login
+
+
 module.exports = router;
