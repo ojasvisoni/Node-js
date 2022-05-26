@@ -355,5 +355,30 @@ Controller.prototype.forgot_password = (req, res) => {
 	}
 };
 
+Controller.prototype.reset_password = (req, res) => {
+	if(!req.body.token || !req.body.password) {
+		response.sendFail(res, (!req.body.password) ? "Password required" : "Reset Token not found");
+	}else{
+		var token = req.body.token;
+		var password = req.body.password;
+
+		if(validator.isUUID(token)){
+			// validator.matches(password, '^.*(?=.{8,16})(?=.*[a-zA-Z])(?=.*\d)(?=.*[!#$%&?_ "]).*$', 'i')
+			if(true){
+				Users.password_reset(token, password, userUtil).then(function(){
+					response.sendSuccess(res, "Password reset success");
+				}).catch(function(err){
+					response.sendFail(res, err);
+				});
+			}else{
+				response.sendFail(res, "Invalid password, please check it can be between 8-16 only");
+			}
+		}else{
+			response.sendFail(res, "Invalid token");
+		}
+	}
+};
+
+
 
 module.exports = new Controller();

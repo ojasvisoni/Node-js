@@ -17,5 +17,6 @@ router.post("/login", accountController.login);
 router.post("/login_with_2fa", accountController.login_with_2fa);
 router.post("/send_otp", accountController.send_otp);
 router.post("/forgot_password", accountController.forgot_password);
+router.post("/reset_password", accountController.reset_password);
 
 module.exports = router;
