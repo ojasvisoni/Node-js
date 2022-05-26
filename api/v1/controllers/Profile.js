@@ -28,3 +28,14 @@ var upload = multer({
 
 function Controller() {}
 
+Controller.prototype.account = (req, res) => {
+	if(!req.auth.user_id) {
+		response.sendFail(res, "Unauthorised access!");
+	}else{
+		Users.account(req.auth.user_id).then(function(account){
+			response.sendSuccess(res, "Account Info", account);
+		}).catch(function(err){
+			response.sendFail(res, err);
+		});
+	}
+};
