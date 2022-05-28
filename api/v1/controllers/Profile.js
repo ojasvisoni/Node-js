@@ -10,7 +10,6 @@ var emailUtil = require("./../helpers/emails");
 var Users = require("./../models/Users");
 var Profile = require("./../models/Profile");
 var config = require("./../../../config");
-var KYC = require("./../models/KYC");
 var Transfers = require("./../models/Transfers");
 
 var file_storage = multer.diskStorage({
