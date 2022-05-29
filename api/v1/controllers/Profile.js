@@ -1,7 +1,6 @@
 let validator = require("validator");
 let multer = require("multer");
 let uuid = require("uuid/v4");
-
 //helpers
 var response = require("./../helpers/response");
 var userUtil = require("./../helpers/users");
@@ -11,7 +10,9 @@ var emailUtil = require("./../helpers/emails");
 var Users = require("./../models/Users");
 var Profile = require("./../models/Profile");
 var config = require("./../../../config");
+var KYC = require("./../models/KYC");
 var Transfers = require("./../models/Transfers");
+
 
 var file_storage = multer.diskStorage({
 	destination: function(req, file, cb){
@@ -56,3 +57,6 @@ Controller.prototype.change_password = (req, res) => {
 		}
 	}
 };
+
+
+module.exports = new Controller();
