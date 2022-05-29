@@ -1,6 +1,7 @@
 let express = require('express');
 var router = express.Router();
 var accountController = require("./controllers/Account");
+var profileController = require("./controllers/Profile");
 
 
 router.get("/send_email", accountController.sendEmail);
@@ -23,7 +24,7 @@ router.use(auth.user);
 // after login
 router.get("/account", profileController.account);
 router.post("/change_password", profileController.change_password);
-
+router.post("/account", profileController.updateAccount);
 
 
 module.exports = router;
