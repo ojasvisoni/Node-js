@@ -22,6 +22,8 @@ router.post("/reset_password", accountController.reset_password);
 router.use(auth.user);
 // after login
 router.get("/account", profileController.account);
+router.post("/change_password", profileController.change_password);
+
 
 
 module.exports = router;
