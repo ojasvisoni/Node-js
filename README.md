@@ -15,7 +15,7 @@ api/v1 <br />
           -> routes.js -> It directs incoming API requests to backend resources. Consist of an HTTP method and a resource path <br />
 
 ### Database schemas used:
-Tempates.js for emails(uuid, name, type, subject, body)
-UserAccount.js for user registeration(2FA, Password reset, kyc, security, notification, verification)
-UserLogin.js for user login(uuid and timestamp)
+Tempates.js for emails(uuid, name, type, subject, body) <br />
+UserAccount.js for user registeration(2FA, Password reset, kyc, security, notification, verification) <br />
+UserLogin.js for user login(uuid and timestamp) <br />
 UserProfile.js for user Profile(uuid, user id, name, email, phone no., address, dob)
