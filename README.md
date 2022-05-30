@@ -1,5 +1,5 @@
 # Node Js User Login and Registration Rest Api 
-Function includes user registeration, login, dashboard, account updatation, Profile updation
+Function includes user registeration, login, dashboard, account updatation, Profile updation, email verifications, forget and reset password functionality
 
 ### For this project:
 1. MongoDB database is used. 
