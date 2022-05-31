@@ -25,6 +25,7 @@ router.use(auth.user);
 router.get("/account", profileController.account);
 router.post("/change_password", profileController.change_password);
 router.post("/account", profileController.updateAccount);
+router.get("/profile", profileController.getProfile);
 
 
 module.exports = router;
