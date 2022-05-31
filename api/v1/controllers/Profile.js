@@ -74,4 +74,14 @@ Controller.prototype.updateAccount = (req, res) => {
 	}
 };
 
+
+Controller.prototype.getProfile = (req, res) => {
+	Profile.getProfile(req.auth.user_id).then(function(profile){
+		response.sendSuccess(res, "Profile", profile);
+	}).catch(function(err){
+		response.sendFail(res, err);
+	});
+};
+
+
 module.exports = new Controller();
