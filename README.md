@@ -5,6 +5,7 @@ Function includes user registeration, login, dashboard, account updatation, Prof
 1. MongoDB database is used. 
 2. MSG91 API(using curl) is used to send OTP to phone.
 3. SMPT is used for email verification.
+4. Language used: Javascript.
 
 ### REST API Structure:
 api/v1 <br />
