@@ -20,3 +20,4 @@ Tempates.js for emails(uuid, name, type, subject, body) <br />
 UserAccount.js for user registeration(2FA, Password reset, kyc, security, notification, verification) <br />
 UserLogin.js for user login(uuid and timestamp) <br />
 UserProfile.js for user Profile(uuid, user id, name, email, phone no., address, dob)
+Thanks!
